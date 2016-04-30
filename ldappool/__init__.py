@@ -214,13 +214,13 @@ class ConnectionManager(object):
                 conn.timeout = self.timeout
                 self._bind(conn, bind, passwd)
                 connected = True
-            except ldap.LDAPError, exc:
+            except ldap.LDAPError as exc:
                 time.sleep(self.retry_delay)
                 tries += 1
 
         if not connected:
-            if isinstance(exc, (ldap.NO_SUCH_OBJECT,
-                                ldap.INVALID_CREDENTIALS)):
+            if exc and isinstance(exc, (ldap.NO_SUCH_OBJECT,
+                                        ldap.INVALID_CREDENTIALS)):
                 raise exc
 
             # that's something else
